@@ -1,6 +1,14 @@
 import { FormEvent, useState } from "react";
 import { Button } from "../ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -11,13 +19,18 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useAppDispatch } from "@/redux/feature/hooks";
-import { addToDo } from "@/redux/feature/todoSlice";
+// import { useAppDispatch } from "@/redux/feature/hooks";
+import { useAddToDosMutation } from "@/redux/api/api";
+import { SelectGroup, SelectLabel } from "@radix-ui/react-select";
+// import { addToDo } from "@/redux/feature/todoSlice";
 
 const AddToDoModal = () => {
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
-  const dispatch = useAppDispatch();
+  const [priority, setPriority] = useState("");
+  // const dispatch = useAppDispatch();
+
+  const [postData] = useAddToDosMutation();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -25,9 +38,12 @@ const AddToDoModal = () => {
       id: Math.random().toString(36).substring(2, 7),
       title: task,
       description: description,
+      priority: priority,
+      isCompleted: false,
     };
 
-    dispatch(addToDo(todoData));
+    // dispatch(addToDo(todoData));
+    postData(todoData);
   };
   return (
     <>
@@ -65,9 +81,27 @@ const AddToDoModal = () => {
                   onBlur={(e) => setDescription(e.target.value)}
                 />
               </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">
+                  Priotiry
+                </Label>
+                <Select onValueChange={(val) => setPriority(val)}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Priotiry</SelectLabel>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex justify-end">
-              <DialogClose>
+              <DialogClose asChild>
                 <Button type="submit">Save changes</Button>
               </DialogClose>
             </div>

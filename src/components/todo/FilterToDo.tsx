@@ -1,3 +1,4 @@
+import { CountState, SetCount } from "@/App";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,11 +9,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 
-const FilterToDo = () => {
-  const [position, setPosition] = useState("");
-
+const FilterToDo = ({
+  priority,
+  setPriority,
+}: {
+  priority: CountState;
+  setPriority: SetCount;
+}) => {
   return (
     <>
       <DropdownMenu>
@@ -22,10 +26,10 @@ const FilterToDo = () => {
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Filter By Priority</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-            <DropdownMenuRadioItem value="top">High</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="bottom">Mid</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="right">Low</DropdownMenuRadioItem>
+          <DropdownMenuRadioGroup value={priority} onValueChange={setPriority}>
+            <DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="medium">Mid</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
